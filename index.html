@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="kk" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тікбұрышты үшбұрыштар - 7-сынып Геометрия</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Montserrat & Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                        },
+                        accent: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        heading: ['Comfortaa', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .dark .glassmorphism {
+            background: rgba(15, 23, 42, 0.85);
+        }
+        .tab-active {
+            border-bottom: 4px solid #0284c7;
+            color: #0284c7;
+            font-weight: 800;
+        }
+        .dark .tab-active {
+            border-bottom: 4px solid #38bdf8;
+            color: #38bdf8;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        @keyframes pulse-light {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-light 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen transition-colors duration-300 flex flex-col justify-between">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 glassmorphism border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/30 transform hover:rotate-6 transition-transform">
+                        <i class="fa-solid font-bold text-xl fa-shapes"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-heading font-extrabold text-xl sm:text-2xl bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600 dark:from-sky-400 dark:to-indigo-400">
+                            Тікбұрышты Үшбұрыштар
+                        </h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold">7-сынып Геометрия Интерактивті Күші</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1 font-bold text-sm">
+                    <button onclick="switchTab('simulator')" id="nav-simulator" class="nav-btn px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-sky-500"></i> Симулятор
+                    </button>
+                    <button onclick="switchTab('theory')" id="nav-theory" class="nav-btn px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-emerald-500"></i> Теория
+                    </button>
+                    <button onclick="switchTab('calculator')" id="nav-calculator" class="nav-btn px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-purple-500"></i> Калькулятор
+                    </button>
+                    <button onclick="switchTab('games')" id="nav-games" class="nav-btn px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad text-amber-500"></i> Ойындар
+                    </button>
+                    <button onclick="switchTab('achievements')" id="nav-achievements" class="nav-btn px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-yellow-500"></i> Жетістіктер
+                    </button>
+                </nav>
+
+                <!-- Right controls: Theme & Points -->
+                <div class="flex items-center space-x-3">
+                    <div class="flex items-center bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 px-3 py-1.5 rounded-full text-xs font-black border border-amber-300 dark:border-amber-700">
+                        <i class="fa-solid fa-star text-amber-500 mr-1.5 text-sm animate-bounce"></i>
+                        <span id="user-points">0</span> ұпай
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                        <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 px-4 pt-2 pb-4 space-y-2 bg-white dark:bg-slate-900 shadow-xl">
+            <button onclick="switchTab('simulator'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-bold flex items-center gap-3">
+                <i class="fa-solid fa-sliders text-sky-500"></i> Симулятор
+            </button>
+            <button onclick="switchTab('theory'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-bold flex items-center gap-3">
+                <i class="fa-solid fa-book-open text-emerald-500"></i> Теория
+            </button>
+            <button onclick="switchTab('calculator'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-bold flex items-center gap-3">
+                <i class="fa-solid fa-calculator text-purple-500"></i> Калькулятор
+            </button>
+            <button onclick="switchTab('games'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-bold flex items-center gap-3">
+                <i class="fa-solid fa-gamepad text-amber-500"></i> Ойындар
+            </button>
+            <button onclick="switchTab('achievements'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-bold flex items-center gap-3">
+                <i class="fa-solid fa-trophy text-yellow-500"></i> Жетістіктер
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+
+        <!-- SECTION 1: DYNAMIC VISUAL SIMULATION -->
+        <section id="tab-simulator" class="tab-content space-y-6">
+            <!-- Hero banner -->
+            <div class="bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider mb-3">Интерактивті Зертхана</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold font-heading mb-3">Тікбұрышты Үшбұрышты Өзің Модельде!</h2>
+                    <p class="text-sky-100 text-sm sm:text-base">Катеттердің ұзындығын өзгертіп, гипотенузаның, бұрыштардың және ауданның қалай өзгеретінін нақты уақытта бақылаңыз!</p>
+                </div>
+                <i class="fa-solid fa-triangle-exclamation absolute right-4 -bottom-8 text-white/10 text-9xl transform rotate-12 pointer-events-none"></i>
+            </div>
+
+            <!-- Interactive Grid & Visualizer -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- SVG Geometry Display Card -->
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 flex flex-col items-center">
+                    <div class="w-full flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-lg text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-eye text-sky-500"></i> Визуалды График
+                        </h3>
+                        <span class="text-xs bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-300 font-bold px-3 py-1 rounded-full">
+                            Масштаб: Авто
+                        </span>
+                    </div>
+
+                    <!-- Canvas/SVG Container -->
+                    <div class="w-full h-72 sm:h-96 bg-slate-50 dark:bg-slate-900/80 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center justify-center p-4 relative overflow-hidden">
+                        <svg id="triangle-svg" viewBox="0 0 400 300" class="w-full h-full drop-shadow-lg">
+                            <!-- SVG elements dynamically drawn by JS -->
+                        </svg>
+                    </div>
+
+                    <div class="w-full grid grid-cols-3 gap-3 mt-4 text-center">
+                        <div class="bg-sky-50 dark:bg-sky-950/40 border border-sky-100 dark:border-sky-900 rounded-xl p-3">
+                            <span class="block text-xs text-sky-600 dark:text-sky-400 font-bold">Табаны (Катет a)</span>
+                            <span id="display-sim-a" class="text-lg font-black text-sky-700 dark:text-sky-300">6.0 см</span>
+                        </div>
+                        <div class="bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900 rounded-xl p-3">
+                            <span class="block text-xs text-indigo-600 dark:text-indigo-400 font-bold">Биіктігі (Катет b)</span>
+                            <span id="display-sim-b" class="text-lg font-black text-indigo-700 dark:text-indigo-300">8.0 см</span>
+                        </div>
+                        <div class="bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900 rounded-xl p-3">
+                            <span class="block text-xs text-purple-600 dark:text-purple-400 font-bold">Гипотенуза (c)</span>
+                            <span id="display-sim-c" class="text-lg font-black text-purple-700 dark:text-purple-300">10.0 см</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sliders & Calculated Metrics -->
+                <div class="lg:col-span-5 space-y-6">
+                    <!-- Controls Card -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 space-y-6">
+                        <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100 border-b pb-3 dark:border-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-indigo-500"></i> Қабырғаларды реттеу
+                        </h3>
+
+                        <!-- Slider A -->
+                        <div>
+                            <div class="flex justify-between font-bold text-sm mb-2">
+                                <label for="sim-range-a" class="text-sky-600 dark:text-sky-400">Катет a (көлденең):</label>
+                                <span id="sim-val-a" class="text-slate-700 dark:text-slate-300">6 см</span>
+                            </div>
+                            <input type="range" id="sim-range-a" min="2" max="20" step="0.5" value="6" oninput="updateSimulator()" class="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                        </div>
+
+                        <!-- Slider B -->
+                        <div>
+                            <div class="flex justify-between font-bold text-sm mb-2">
+                                <label for="sim-range-b" class="text-indigo-600 dark:text-indigo-400">Катет b (тік):</label>
+                                <span id="sim-val-b" class="text-slate-700 dark:text-slate-300">8 см</span>
+                            </div>
+                            <input type="range" id="sim-range-b" min="2" max="20" step="0.5" value="8" oninput="updateSimulator()" class="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                        </div>
+
+                        <!-- Angles & Area Details -->
+                        <div class="pt-4 border-t dark:border-slate-700 space-y-3">
+                            <div class="flex justify-between items-center text-sm font-semibold">
+                                <span class="text-slate-500">Сүйір бұрыш &alpha;:</span>
+                                <span id="sim-angle-alpha" class="font-bold text-slate-800 dark:text-slate-200">36.87°</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm font-semibold">
+                                <span class="text-slate-500">Сүйір бұрыш &beta;:</span>
+                                <span id="sim-angle-beta" class="font-bold text-slate-800 dark:text-slate-200">53.13°</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm font-semibold">
+                                <span class="text-slate-500">Тік бұрыш &gamma;:</span>
+                                <span class="font-bold text-slate-800 dark:text-slate-200">90.00°</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm font-semibold">
+                                <span class="text-slate-500">Ауданы (S = ½ · a · b):</span>
+                                <span id="sim-area" class="font-bold text-emerald-600 dark:text-emerald-400">24.00 см²</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm font-semibold">
+                                <span class="text-slate-500">Периметрі (P = a + b + c):</span>
+                                <span id="sim-perimeter" class="font-bold text-amber-600 dark:text-amber-400">24.00 см</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formula Box Card -->
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-3xl shadow-lg border border-slate-700 space-y-3">
+                        <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
+                            <i class="fa-solid fa-square-root-variable"></i> Пифагор Теоремасы
+                        </div>
+                        <div id="sim-pythagoras-formula" class="font-mono text-center text-lg sm:text-xl py-2 bg-white/10 rounded-xl text-amber-300 font-bold">
+                            6² + 8² = 10² &rArr; 36 + 64 = 100
+                        </div>
+                        <p class="text-xs text-slate-400 text-center">Гипотенузаның квадраты катеттердің квадраттарының қосындысына тең.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THEORY & PROPERTIES -->
+        <section id="tab-theory" class="tab-content hidden space-y-8">
+            <!-- Theory Banner -->
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="px-3 py-1 bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded-full text-xs font-bold uppercase tracking-wide">Негізгі Теория</span>
+                <h2 class="text-3xl font-extrabold font-heading text-slate-800 dark:text-slate-100">Тікбұрышты Үшбұрыштар Теориясы</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base">7-сынып бағдарламасы бойынша ең маңызды анықтамалар, қасиеттер мен теңдік белгілері.</p>
+            </div>
+
+            <!-- Key Concepts Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1: Definition -->
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-300 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Анықтамасы</h3>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                        Бір бұрышы тік (90°) болатын үшбұрыш <strong>тікбұрышты үшбұрыш</strong> деп аталады.
+                    </p>
+                    <ul class="mt-4 space-y-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Тік бұрышқа қарсы қабырға – <strong>Гипотенуза</strong></li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Тік бұрышты құрайтын қабырғалар – <strong>Катеттер</strong></li>
+                    </ul>
+                </div>
+
+                <!-- Card 2: 30-degree Rule -->
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-300 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">30° Бұрыш Қасиеті</h3>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                        Тікбұрышты үшбұрышта <strong>30°-қа қарсы жатқан катет</strong> гипотенузаның жартысына тең болады!
+                    </p>
+                    <div class="mt-4 bg-amber-50 dark:bg-amber-950/40 p-3 rounded-xl border border-amber-200 dark:border-amber-900 font-mono text-center text-amber-700 dark:text-amber-300 font-bold text-sm">
+                        Егер &alpha; = 30° болса &rArr; a = c / 2
+                    </div>
+                </div>
+
+                <!-- Card 3: Acute Angles -->
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-shadow">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Сүйір бұрыштар қосындысы</h3>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                        Тікбұрышты үшбұрыштың екі сүйір бұрышының қосындысы әрқашан <strong>90°-қа тең</strong>.
+                    </p>
+                    <div class="mt-4 bg-indigo-50 dark:bg-indigo-950/40 p-3 rounded-xl border border-indigo-200 dark:border-indigo-900 font-mono text-center text-indigo-700 dark:text-indigo-300 font-bold text-sm">
+                        &alpha; + &beta; = 90°
+                    </div>
+                </div>
+            </div>
+
+            <!-- Congruence Tests Section (Теңдік белгілері) -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-md border border-slate-200 dark:border-slate-700 space-y-6">
+                <h3 class="text-2xl font-extrabold font-heading text-slate-800 dark:text-slate-100 flex items-center gap-3">
+                    <i class="fa-solid fa-equals text-emerald-500"></i> Тікбұрышты үшбұрыштардың теңдік белгілері
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 flex items-start gap-4">
+                        <span class="w-8 h-8 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0">1</span>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">Екі катет бойынша</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Егер бір тікбұрышты үшбұрыштың катеттері екінші тікбұрышты үшбұрыштың тиісті катеттеріне тең болса.</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 flex items-start gap-4">
+                        <span class="w-8 h-8 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0">2</span>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">Катет пен сүйір бұрыш бойынша</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Егер бір тікбұрышты үшбұрыштың катеті мен оған іргелес (немесе қарсы) сүйір бұрышы екіншісіне тең болса.</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 flex items-start gap-4">
+                        <span class="w-8 h-8 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0">3</span>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">Гипотенуза мен сүйір бұрыш бойынша</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Егер бір тікбұрышты үшбұрыштың гипотенузасы мен сүйір бұрышы екіншісіне тең болса.</p>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 flex items-start gap-4">
+                        <span class="w-8 h-8 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0">4</span>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">Гипотенуза мен катет бойынша</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Егер бір тікбұрышты үшбұрыштың гипотенузасы мен катеті екіншісінің тиісті жақтарына тең болса.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: CALCULATOR & SOLVER -->
+        <section id="tab-calculator" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 rounded-full text-xs font-bold uppercase tracking-wide">Ақылды Құрал</span>
+                <h2 class="text-3xl font-extrabold font-heading text-slate-800 dark:text-slate-100">Үшбұрышты Есептегіш Калькулятор</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">Белгілі екі шаманы енгізіңіз, калькулятор қалған барлық бұрыштар мен қабырғаларды қадам-қадаммен есептеп береді!</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Input Controls -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 space-y-6">
+                    <h3 class="font-bold text-lg border-b pb-3 dark:border-slate-700">Енгізу шарттары</h3>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-2">Есептеу режимі</label>
+                        <select id="calc-mode" onchange="toggleCalcInputs()" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <option value="two-catheti">Екі катет белгілі (a және b)</option>
+                            <option value="cathetus-hypotenuse">Катет пен Гипотенуза белгілі (a және c)</option>
+                            <option value="cathetus-angle">Катет a және сүйір бұрыш &alpha;</option>
+                        </select>
+                    </div>
+
+                    <!-- Input 1 -->
+                    <div id="calc-field-1">
+                        <label id="calc-label-1" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Катет a:</label>
+                        <input type="number" id="calc-val-1" value="3" min="0.1" step="any" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    </div>
+
+                    <!-- Input 2 -->
+                    <div id="calc-field-2">
+                        <label id="calc-label-2" class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">Катет b:</label>
+                        <input type="number" id="calc-val-2" value="4" min="0.1" step="any" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 font-bold text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    </div>
+
+                    <button onclick="calculateTriangle()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-extrabold rounded-2xl shadow-lg shadow-purple-500/30 transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Есептеу
+                    </button>
+                </div>
+
+                <!-- Output Step-by-Step Box -->
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 space-y-4">
+                    <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-square-poll-vertical text-purple-500"></i> Толық Шешімі
+                    </h3>
+
+                    <div id="calc-solution-steps" class="space-y-3 font-sans text-sm text-slate-700 dark:text-slate-300">
+                        <!-- Dynamic solution output inserted here -->
+                        <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-center text-slate-400">
+                            Мәндерді енгізіп, «Есептеу» батырмасын басыңыз.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: GAMES & QUIZZES -->
+        <section id="tab-games" class="tab-content hidden space-y-8">
+            <!-- Game selection bar -->
+            <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="switchGame('quiz')" id="gtab-quiz" class="game-tab-btn px-5 py-3 rounded-2xl font-bold text-sm bg-amber-500 text-white shadow-lg shadow-amber-500/30 flex items-center gap-2">
+                    <i class="fa-solid fa-bolt"></i> 1-Ойын: Пифагор Шайқасы
+                </button>
+                <button onclick="switchGame('puzzle')" id="gtab-puzzle" class="game-tab-btn px-5 py-3 rounded-2xl font-bold text-sm bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                    <i class="fa-solid fa-puzzle-piece"></i> 2-Ойын: Қабырғаны Тап!
+                </button>
+                <button onclick="switchGame('tf')" id="gtab-tf" class="game-tab-btn px-5 py-3 rounded-2xl font-bold text-sm bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> 3-Ойын: Шын / Жалған
+                </button>
+            </div>
+
+            <!-- GAME 1: PYTHAGOREAN QUEST QUIZ -->
+            <div id="game-quiz-container" class="max-w-2xl mx-auto bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200 dark:border-slate-700 relative overflow-hidden">
+                <!-- Header Stats -->
+                <div class="flex justify-between items-center mb-6 pb-4 border-b dark:border-slate-700">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-extrabold uppercase text-amber-500 tracking-wide">Сұрақ <span id="quiz-idx">1</span>/5</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs font-bold">
+                        <span class="text-emerald-500"><i class="fa-solid fa-fire mr-1"></i> Стрик: <span id="quiz-streak">0</span></span>
+                        <span class="text-indigo-500"><i class="fa-solid fa-stopwatch mr-1"></i> Уақыт: <span id="quiz-timer">20</span>с</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Card Content -->
+                <div id="quiz-body" class="space-y-6">
+                    <h3 id="quiz-question-text" class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100">
+                        Катеттері 6 см және 8 см болатын тікбұрышты үшбұрыштың гипотенузасы неге тең?
+                    </h3>
+
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Options generated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Result Overlay / Card -->
+                <div id="quiz-result" class="hidden text-center space-y-4 py-8">
+                    <div class="w-20 h-20 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-500 flex items-center justify-center text-4xl mx-auto">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-2xl font-black">Шайқас Аяқталды!</h3>
+                    <p class="text-slate-600 dark:text-slate-400">Сіз табуға тиіс ұпай жинадыңыз:</p>
+                    <div id="quiz-final-score" class="text-4xl font-black text-amber-500">+50 ұпай</div>
+                    <button onclick="startQuizGame()" class="px-8 py-3 bg-amber-500 hover:bg-amber-600 text-white font-extrabold rounded-2xl shadow-lg transition">
+                        Қайта ойнау
+                    </button>
+                </div>
+            </div>
+
+            <!-- GAME 2: MISSING SIDE VISUAL PUZZLE -->
+            <div id="game-puzzle-container" class="hidden max-w-2xl mx-auto bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200 dark:border-slate-700 space-y-6">
+                <div class="text-center space-y-1">
+                    <h3 class="text-xl font-bold">Белгісіз қабырғаны тап!</h3>
+                    <p class="text-xs text-slate-500">Үшбұрыштағы Х мәнін есептеп, дұрыс жауапты таңдаңыз.</p>
+                </div>
+
+                <div class="w-full h-56 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center p-4 border dark:border-slate-800">
+                    <svg id="puzzle-svg" viewBox="0 0 300 200" class="w-full h-full">
+                        <!-- Dynamic Puzzle SVG -->
+                    </svg>
+                </div>
+
+                <div id="puzzle-options" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <!-- Dynamic Answer Options -->
+                </div>
+
+                <div id="puzzle-feedback" class="text-center font-bold text-sm min-h-[24px]"></div>
+            </div>
+
+            <!-- GAME 3: TRUE OR FALSE FLASHCARDS -->
+            <div id="game-tf-container" class="hidden max-w-xl mx-auto bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200 dark:border-slate-700 space-y-6 text-center">
+                <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded-full text-xs font-bold uppercase">Жылдам Экспресс Тест</span>
+                
+                <div class="min-h-[120px] flex items-center justify-center p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border dark:border-slate-800">
+                    <h3 id="tf-statement-text" class="text-lg font-bold text-slate-800 dark:text-slate-100">
+                        Тікбұрышты үшбұрыштың екі сүйір бұрышының қосындысы 90°-қа тең.
+                    </h3>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="checkTF(false)" class="flex-1 py-4 bg-rose-500 hover:bg-rose-600 text-white font-black rounded-2xl shadow-lg shadow-rose-500/30 transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-xmark text-xl"></i> ЖАЛҒАН
+                    </button>
+                    <button onclick="checkTF(true)" class="flex-1 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl shadow-lg shadow-emerald-500/30 transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check text-xl"></i> ШЫН
+                    </button>
+                </div>
+
+                <div id="tf-feedback" class="font-bold text-sm min-h-[24px]"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: ACHIEVEMENTS & PROGRESS TRACKER -->
+        <section id="tab-achievements" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="px-3 py-1 bg-yellow-100 dark:bg-yellow-950 text-yellow-600 dark:text-yellow-400 rounded-full text-xs font-bold uppercase tracking-wide">Сіздің Статистикаңыз</span>
+                <h2 class="text-3xl font-extrabold font-heading text-slate-800 dark:text-slate-100">Жетістіктер мен Бейдждер</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">Ойындарды ойнап, симуляторды зерттеу арқылы жаңа дәрежелерді ашыңыз!</p>
+            </div>
+
+            <!-- Profile Summary Card -->
+            <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-slate-800">
+                <div class="flex items-center gap-4">
+                    <div class="w-20 h-20 rounded-full bg-amber-500 flex items-center justify-center text-4xl shadow-lg shadow-amber-500/40 border-4 border-slate-900">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h3 id="user-rank" class="text-2xl font-black text-amber-400">Пифагор Бастаушысы</h3>
+                        <p class="text-xs text-slate-400 font-semibold">7-сынып Геометрия Зерттеушісі</p>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-1/2 space-y-2">
+                    <div class="flex justify-between text-xs font-bold">
+                        <span>Келесі деңгейге дейін:</span>
+                        <span id="level-progress-text">0 / 100 ұпай</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-700">
+                        <div id="level-progress-bar" class="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges Collection Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Badge 1 -->
+                <div id="badge-1" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 text-center opacity-50 transition">
+                    <div class="w-16 h-16 rounded-2xl bg-sky-100 dark:bg-sky-900/50 text-sky-500 flex items-center justify-center text-3xl mx-auto mb-3">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h4 class="font-bold text-base">Зерттеуші Пифагор</h4>
+                    <p class="text-xs text-slate-500 mt-1">Симуляторды іске қосып, параметрлерді өзгерттіңіз</p>
+                    <span class="badge-status inline-block mt-3 text-[10px] font-black uppercase px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400">Құлыптаулы</span>
+                </div>
+
+                <!-- Badge 2 -->
+                <div id="badge-2" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 text-center opacity-50 transition">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-100 dark:bg-purple-900/50 text-purple-500 flex items-center justify-center text-3xl mx-auto mb-3">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h4 class="font-bold text-base">Үшбұрыш Шебері</h4>
+                    <p class="text-xs text-slate-500 mt-1">Калькулятор көмегімен 1 есепті сәтті шығардыңыз</p>
+                    <span class="badge-status inline-block mt-3 text-[10px] font-black uppercase px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400">Құлыптаулы</span>
+                </div>
+
+                <!-- Badge 3 -->
+                <div id="badge-3" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 text-center opacity-50 transition">
+                    <div class="w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-900/50 text-amber-500 flex items-center justify-center text-3xl mx-auto mb-3">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h4 class="font-bold text-base">Шайқас Батыры</h4>
+                    <p class="text-xs text-slate-500 mt-1">«Пифагор Шайқасы» ойынын аяқтадыңыз</p>
+                    <span class="badge-status inline-block mt-3 text-[10px] font-black uppercase px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400">Құлыптаулы</span>
+                </div>
+
+                <!-- Badge 4 -->
+                <div id="badge-4" class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-md border border-slate-200 dark:border-slate-700 text-center opacity-50 transition">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-500 flex items-center justify-center text-3xl mx-auto mb-3">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <h4 class="font-bold text-base">Геометрия Инженері</h4>
+                    <p class="text-xs text-slate-500 mt-1">Барлығы 100 ұпайдан астам жинадыңыз</p>
+                    <span class="badge-status inline-block mt-3 text-[10px] font-black uppercase px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400">Құлыптаулы</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 bg-white dark:bg-slate-900 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400 space-y-2">
+            <p class="font-bold">7-сынып Геометрия пәніне арналған заманауи интерактивті оқу сайты</p>
+            <p>© 2026 Интерактивті Тікбұрышты Үшбұрыштар | Қазақстан білім беру стандартына сай</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // State management
+        let state = {
+            points: 0,
+            unlockedBadges: [],
+            quizIndex: 0,
+            quizScore: 0,
+            quizStreak: 0,
+            quizTimer: null,
+            quizTimeLeft: 20,
+            puzzleCurrent: null,
+            tfIndex: 0
+        };
+
+        // Quiz Questions Array
+        const quizQuestions = [
+            {
+                q: "Катеттері 6 см және 8 см болатын тікбұрышты үшбұрыштың гипотенузасын табыңыз:",
+                options: ["10 см", "12 см", "14 см", "9 см"],
+                answer: 0
+            },
+            {
+                q: "Тікбұрышты үшбұрыштың гипотенузасы 10 см, ал бір сүйір бұрышы 30°. Бұл бұрышқа қарсы жатқан катет неге тең?",
+                options: ["5 см", "8 см", "6 см", "10 см"],
+                answer: 0
+            },
+            {
+                q: "Тікбұрышты үшбұрыштың бір сүйір бұрышы 40° болса, екінші сүйір бұрышы неге тең?",
+                options: ["50°", "60°", "40°", "90°"],
+                answer: 0
+            },
+            {
+                q: "Катеттері a = 5 және b = 12 болса, гипотенуза c неге тең?",
+                options: ["13", "15", "17", "14"],
+                answer: 0
+            },
+            {
+                q: "Тікбұрышты үшбұрыштың ауданын табу формуласы қандай?",
+                options: ["S = ½ · a · b", "S = a · b", "S = a + b + c", "S = a² + b²"],
+                answer: 0
+            }
+        ];
+
+        // True/False statements array
+        const tfStatements = [
+            { text: "Тікбұрышты үшбұрыштың екі сүйір бұрышының қосындысы 90°-қа тең.", answer: true },
+            { text: "30° бұрышқа қарсы жатқан катет гипотенузадан 2 есе ұзын болады.", answer: false },
+            { text: "Гипотенуза әрқашан катеттерден ұзын болады.", answer: true },
+            { text: "Пифагор теоремасы: c² = a² - b²", answer: false },
+            { text: "Екі катеті тең болатын тікбұрышты үшбұрыштың сүйір бұрыштары 45°-тан болады.", answer: true }
+        ];
+
+        // INITIALIZATION
+        window.onload = function() {
+            loadProgress();
+            updateSimulator();
+            toggleCalcInputs();
+            startQuizGame();
+            loadPuzzleGame();
+            loadTFQuestion();
+        };
+
+        // Theme Toggle Functionality
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if(document.documentElement.classList.contains('dark')) {
+                icon.className = 'fa-solid fa-sun text-amber-400 text-lg';
+            } else {
+                icon.className = 'fa-solid fa-moon text-lg';
+            }
+        }
+
+        // Navigation Tabs Control
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('tab-active'));
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if(activeNav) activeNav.classList.add('tab-active');
+
+            if (tabId === 'simulator') {
+                unlockBadge(1);
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // -------------------------------------------------------------------
+        // DYNAMIC SIMULATOR LOGIC & SVG DRAWING
+        // -------------------------------------------------------------------
+        function updateSimulator() {
+            const a = parseFloat(document.getElementById('sim-range-a').value);
+            const b = parseFloat(document.getElementById('sim-range-b').value);
+
+            // Update range labels
+            document.getElementById('sim-val-a').innerText = a + ' см';
+            document.getElementById('sim-val-b').innerText = b + ' см';
+
+            // Calculations
+            const c = Math.sqrt(a * a + b * b);
+            const alpha = Math.atan(b / a) * (180 / Math.PI);
+            const beta = 90 - alpha;
+            const area = 0.5 * a * b;
+            const perimeter = a + b + c;
+
+            // Update DOM metrics
+            document.getElementById('display-sim-a').innerText = a.toFixed(1) + ' см';
+            document.getElementById('display-sim-b').innerText = b.toFixed(1) + ' см';
+            document.getElementById('display-sim-c').innerText = c.toFixed(1) + ' см';
+
+            document.getElementById('sim-angle-alpha').innerText = alpha.toFixed(2) + '°';
+            document.getElementById('sim-angle-beta').innerText = beta.toFixed(2) + '°';
+            document.getElementById('sim-area').innerText = area.toFixed(2) + ' см²';
+            document.getElementById('sim-perimeter').innerText = perimeter.toFixed(2) + ' см';
+
+            document.getElementById('sim-pythagoras-formula').innerText = 
+                `${a}² + ${b}² = ${c.toFixed(1)}² ➔ ${Math.round(a*a)} + ${Math.round(b*b)} = ${Math.round(c*c)}`;
+
+            // Draw Dynamic SVG Triangle
+            drawSVG(a, b, c, alpha);
+        }
+
+        function drawSVG(a, b, c, alpha) {
+            const svg = document.getElementById('triangle-svg');
+            
+            // Map dimensions to SVG coordinates
+            const maxVal = Math.max(a, b);
+            const scale = 180 / maxVal;
+            
+            const p1 = { x: 60, y: 240 }; // Right angle vertex C
+            const p2 = { x: 60 + a * scale, y: 240 }; // Vertex B (right)
+            const p3 = { x: 60, y: 240 - b * scale }; // Vertex A (top)
+
+            svg.innerHTML = `
+                <!-- Background grid lines -->
+                <defs>
+                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-opacity="0.05" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+
+                <!-- Triangle polygon -->
+                <polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}" 
+                         fill="rgba(2, 132, 199, 0.15)" stroke="#0284c7" stroke-width="4" stroke-linejoin="round"/>
+
+                <!-- Right angle symbol -->
+                <path d="M ${p1.x} ${p1.y - 20} L ${p1.x + 20} ${p1.y - 20} L ${p1.x + 20} ${p1.y}" 
+                      fill="none" stroke="#64748b" stroke-width="2"/>
+                <circle cx="${p1.x + 8}" cy="${p1.y - 8}" r="2" fill="#64748b"/>
+
+                <!-- Labels for Sides -->
+                <text x="${(p1.x + p2.x)/2}" y="${p1.y + 25}" text-anchor="middle" class="fill-sky-600 font-extrabold text-sm">a = ${a} см</text>
+                <text x="${p1.x - 30}" y="${(p1.y + p3.y)/2}" text-anchor="middle" class="fill-indigo-600 font-extrabold text-sm">b = ${b} см</text>
+                <text x="${(p2.x + p3.x)/2 + 15}" y="${(p2.y + p3.y)/2 - 10}" text-anchor="middle" class="fill-purple-600 font-extrabold text-sm">c = ${c.toFixed(1)} см</text>
+
+                <!-- Vertex Labels -->
+                <text x="${p1.x - 15}" y="${p1.y + 15}" class="fill-slate-500 font-bold text-xs">C(90°)</text>
+                <text x="${p2.x + 10}" y="${p2.y + 15}" class="fill-slate-500 font-bold text-xs">B (${(90 - alpha).toFixed(1)}°)</text>
+                <text x="${p3.x - 15}" y="${p3.y - 10}" class="fill-slate-500 font-bold text-xs">A (${alpha.toFixed(1)}°)</text>
+            `;
+        }
+
+        // -------------------------------------------------------------------
+        // CALCULATOR LOGIC
+        // -------------------------------------------------------------------
+        function toggleCalcInputs() {
+            const mode = document.getElementById('calc-mode').value;
+            const l1 = document.getElementById('calc-label-1');
+            const l2 = document.getElementById('calc-label-2');
+
+            if (mode === 'two-catheti') {
+                l1.innerText = 'Катет a:';
+                l2.innerText = 'Катет b:';
+            } else if (mode === 'cathetus-hypotenuse') {
+                l1.innerText = 'Катет a:';
+                l2.innerText = 'Гипотенуза c:';
+            } else if (mode === 'cathetus-angle') {
+                l1.innerText = 'Катет a:';
+                l2.innerText = 'Сүйір бұрыш α (градус):';
+            }
+        }
+
+        function calculateTriangle() {
+            const mode = document.getElementById('calc-mode').value;
+            const v1 = parseFloat(document.getElementById('calc-val-1').value);
+            const v2 = parseFloat(document.getElementById('calc-val-2').value);
+            const container = document.getElementById('calc-solution-steps');
+
+            if (isNaN(v1) || isNaN(v2) || v1 <= 0 || v2 <= 0) {
+                container.innerHTML = `<div class="p-4 bg-rose-100 text-rose-700 rounded-2xl font-bold">Өтініш, оң сандарды енгізіңіз!</div>`;
+                return;
+            }
+
+            let a, b, c, alpha, beta, stepsHtml = '';
+
+            if (mode === 'two-catheti') {
+                a = v1;
+                b = v2;
+                c = Math.sqrt(a * a + b * b);
+                alpha = Math.atan(b / a) * (180 / Math.PI);
+                beta = 90 - alpha;
+
+                stepsHtml = `
+                    <div class="p-4 bg-purple-50 dark:bg-purple-950/40 rounded-2xl border border-purple-200 dark:border-purple-900 space-y-2">
+                        <p class="font-bold text-purple-700 dark:text-purple-300">1-қадам: Гипотенузаны табу (Пифагор теоремасы)</p>
+                        <p class="font-mono text-xs">c = &radic;(a² + b²) = &radic;(${a}² + ${b}²) = &radic;(${a*a} + ${b*b}) = &radic;(${a*a + b*b}) = <strong>${c.toFixed(2)}</strong></p>
+                    </div>
+                `;
+            } else if (mode === 'cathetus-hypotenuse') {
+                a = v1;
+                c = v2;
+                if (a >= c) {
+                    container.innerHTML = `<div class="p-4 bg-rose-100 text-rose-700 rounded-2xl font-bold">Қате! Катет гипотенузадан үлкен немесе тең бола алмайды.</div>`;
+                    return;
+                }
+                b = Math.sqrt(c * c - a * a);
+                alpha = Math.asin(a / c) * (180 / Math.PI);
+                beta = 90 - alpha;
+
+                stepsHtml = `
+                    <div class="p-4 bg-purple-50 dark:bg-purple-950/40 rounded-2xl border border-purple-200 dark:border-purple-900 space-y-2">
+                        <p class="font-bold text-purple-700 dark:text-purple-300">1-қадам: Белгісіз b катетін табу</p>
+                        <p class="font-mono text-xs">b = &radic;(c² - a²) = &radic;(${c}² - ${a}²) = &radic;(${c*c} - ${a*a}) = <strong>${b.toFixed(2)}</strong></p>
+                    </div>
+                `;
+            } else if (mode === 'cathetus-angle') {
+                a = v1;
+                alpha = v2;
+                if (alpha >= 90) {
+                    container.innerHTML = `<div class="p-4 bg-rose-100 text-rose-700 rounded-2xl font-bold">Сүйір бұрыш 90°-тан кіші болуы керек!</div>`;
+                    return;
+                }
+                const rad = alpha * (Math.PI / 180);
+                b = a / Math.tan(rad);
+                c = a / Math.sin(rad);
+                beta = 90 - alpha;
+
+                stepsHtml = `
+                    <div class="p-4 bg-purple-50 dark:bg-purple-950/40 rounded-2xl border border-purple-200 dark:border-purple-900 space-y-2">
+                        <p class="font-bold text-purple-700 dark:text-purple-300">1-қадам: Екінші сүйір бұрышты табу</p>
+                        <p class="font-mono text-xs">&beta; = 90° - &alpha; = 90° - ${alpha}° = <strong>${beta.toFixed(2)}°</strong></p>
+                    </div>
+                `;
+            }
+
+            const area = 0.5 * a * b;
+            const perimeter = a + b + c;
+
+            stepsHtml += `
+                <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2">
+                    <p class="font-bold text-slate-800 dark:text-slate-200">2-қадам: Ауданы мен Периметрін есептеу</p>
+                    <p class="font-mono text-xs">Ауданы S = ½ · a · b = ½ · ${a.toFixed(1)} · ${b.toFixed(1)} = <strong>${area.toFixed(2)} см²</strong></p>
+                    <p class="font-mono text-xs">Периметрі P = a + b + c = ${a.toFixed(1)} + ${b.toFixed(1)} + ${c.toFixed(1)} = <strong>${perimeter.toFixed(2)} см</strong></p>
+                </div>
+            `;
+
+            container.innerHTML = stepsHtml;
+            unlockBadge(2);
+            addPoints(15);
+        }
+
+        // -------------------------------------------------------------------
+        // GAME LOGIC
+        // -------------------------------------------------------------------
+        function switchGame(gameType) {
+            document.getElementById('game-quiz-container').classList.add('hidden');
+            document.getElementById('game-puzzle-container').classList.add('hidden');
+            document.getElementById('game-tf-container').classList.add('hidden');
+
+            document.querySelectorAll('.game-tab-btn').forEach(b => {
+                b.className = 'game-tab-btn px-5 py-3 rounded-2xl font-bold text-sm bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center gap-2';
+            });
+
+            const activeBtn = document.getElementById(`gtab-${gameType}`);
+
+            if (gameType === 'quiz') {
+                document.getElementById('game-quiz-container').classList.remove('hidden');
+                activeBtn.className = 'game-tab-btn px-5 py-3 rounded-2xl font-bold text-sm bg-amber-500 text-white shadow-lg shadow-amber-500/30 flex items-center gap-2';
+            } else if (gameType === 'puzzle') {
+                document.getElementById('game-puzzle-container').classList.remove('hidden');
+                activeBtn.className = 'game-tab-btn px-5 py-3 rounded-2xl font-bold text-sm bg-amber-500 text-white shadow-lg shadow-amber-500/30 flex items-center gap-2';
+            } else if (gameType === 'tf') {
+                document.getElementById('game-tf-container').classList.remove('hidden');
+                activeBtn.className = 'game-tab-btn px-5 py-3 rounded-2xl font-bold text-sm bg-amber-500 text-white shadow-lg shadow-amber-500/30 flex items-center gap-2';
+            }
+        }
+
+        // Game 1: Quiz
+        function startQuizGame() {
+            state.quizIndex = 0;
+            state.quizScore = 0;
+            state.quizStreak = 0;
+            document.getElementById('quiz-body').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            if (state.quizIndex >= quizQuestions.length) {
+                finishQuizGame();
+                return;
+            }
+
+            const q = quizQuestions[state.quizIndex];
+            document.getElementById('quiz-idx').innerText = state.quizIndex + 1;
+            document.getElementById('quiz-question-text').innerText = q.q;
+            document.getElementById('quiz-streak').innerText = state.quizStreak;
+
+            const optsContainer = document.getElementById('quiz-options');
+            optsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full py-3 px-4 bg-slate-50 dark:bg-slate-900 hover:bg-sky-50 dark:hover:bg-sky-950 border border-slate-200 dark:border-slate-700 rounded-2xl font-bold text-slate-700 dark:text-slate-200 text-left transition flex items-center justify-between';
+                btn.innerHTML = `<span>${opt}</span> <i class="fa-solid fa-chevron-right text-xs opacity-40"></i>`;
+                btn.onclick = () => answerQuiz(idx);
+                optsContainer.appendChild(btn);
+            });
+
+            resetQuizTimer();
+        }
+
+        function resetQuizTimer() {
+            clearInterval(state.quizTimer);
+            state.quizTimeLeft = 20;
+            document.getElementById('quiz-timer').innerText = state.quizTimeLeft;
+
+            state.quizTimer = setInterval(() => {
+                state.quizTimeLeft--;
+                document.getElementById('quiz-timer').innerText = state.quizTimeLeft;
+                if (state.quizTimeLeft <= 0) {
+                    clearInterval(state.quizTimer);
+                    answerQuiz(-1); // Timeout
+                }
+            }, 1000);
+        }
+
+        function answerQuiz(selectedIdx) {
+            clearInterval(state.quizTimer);
+            const q = quizQuestions[state.quizIndex];
+
+            if (selectedIdx === q.answer) {
+                state.quizScore += 20;
+                state.quizStreak++;
+                addPoints(20);
+                confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
+            } else {
+                state.quizStreak = 0;
+            }
+
+            state.quizIndex++;
+            setTimeout(loadQuizQuestion, 500);
+        }
+
+        function finishQuizGame() {
+            document.getElementById('quiz-body').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('quiz-final-score').innerText = `+${state.quizScore} ұпай`;
+            unlockBadge(3);
+        }
+
+        // Game 2: Visual Puzzle
+        function loadPuzzleGame() {
+            const puzzles = [
+                { a: 3, b: 4, c: 'X', answer: 5, options: [5, 6, 7, 8] },
+                { a: 6, b: 'X', c: 10, answer: 8, options: [7, 8, 9, 12] },
+                { a: 'X', b: 12, c: 13, answer: 5, options: [4, 5, 6, 7] }
+            ];
+
+            const p = puzzles[Math.floor(Math.random() * puzzles.length)];
+            state.puzzleCurrent = p;
+
+            const svg = document.getElementById('puzzle-svg');
+            svg.innerHTML = `
+                <polygon points="40,160 220,160 40,40" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b" stroke-width="4"/>
+                <path d="M 40 140 L 60 140 L 60 160" fill="none" stroke="#64748b" stroke-width="2"/>
+                <text x="130" y="185" text-anchor="middle" class="fill-slate-700 font-extrabold text-sm">a = ${p.a}</text>
+                <text x="20" y="100" text-anchor="middle" class="fill-slate-700 font-extrabold text-sm">b = ${p.b}</text>
+                <text x="140" y="90" text-anchor="middle" class="fill-amber-600 font-extrabold text-base">c = ${p.c}</text>
+            `;
+
+            const opts = document.getElementById('puzzle-options');
+            opts.innerHTML = '';
+            document.getElementById('puzzle-feedback').innerText = '';
+
+            p.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'py-3 bg-slate-100 dark:bg-slate-900 font-extrabold rounded-2xl hover:bg-amber-500 hover:text-white transition';
+                btn.innerText = opt;
+                btn.onclick = () => checkPuzzle(opt);
+                opts.appendChild(btn);
+            });
+        }
+
+        function checkPuzzle(opt) {
+            const fb = document.getElementById('puzzle-feedback');
+            if (opt === state.puzzleCurrent.answer) {
+                fb.className = 'text-emerald-500 font-bold';
+                fb.innerText = 'Өте тамаша! Дұрыс жауап! 🎉';
+                addPoints(15);
+                confetti({ particleCount: 30, spread: 50 });
+                setTimeout(loadPuzzleGame, 1200);
+            } else {
+                fb.className = 'text-rose-500 font-bold';
+                fb.innerText = 'Қате, қайтадан байқап көр!';
+            }
+        }
+
+        // Game 3: True / False
+        function loadTFQuestion() {
+            const item = tfStatements[state.tfIndex % tfStatements.length];
+            document.getElementById('tf-statement-text').innerText = item.text;
+            document.getElementById('tf-feedback').innerText = '';
+        }
+
+        function checkTF(userChoice) {
+            const item = tfStatements[state.tfIndex % tfStatements.length];
+            const fb = document.getElementById('tf-feedback');
+
+            if (userChoice === item.answer) {
+                fb.className = 'text-emerald-500 font-bold';
+                fb.innerText = 'Тамаша! Дұрыс таптыңыз! ✨';
+                addPoints(10);
+            } else {
+                fb.className = 'text-rose-500 font-bold';
+                fb.innerText = 'Бұрыс! Мұқият болыңыз.';
+            }
+
+            state.tfIndex++;
+            setTimeout(loadTFQuestion, 1200);
+        }
+
+        // -------------------------------------------------------------------
+        // PROGRESS & BADGES LOGIC
+        // -------------------------------------------------------------------
+        function addPoints(pts) {
+            state.points += pts;
+            document.getElementById('user-points').innerText = state.points;
+            updateAchievements();
+            saveProgress();
+        }
+
+        function unlockBadge(id) {
+            if (!state.unlockedBadges.includes(id)) {
+                state.unlockedBadges.push(id);
+                const b = document.getElementById(`badge-${id}`);
+                if (b) {
+                    b.classList.remove('opacity-50');
+                    const badgeStatus = b.querySelector('.badge-status');
+                    badgeStatus.className = 'badge-status inline-block mt-3 text-[10px] font-black uppercase px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400';
+                    badgeStatus.innerText = 'Ашылды ✓';
+                }
+                saveProgress();
+            }
+        }
+
+        function updateAchievements() {
+            const pts = state.points;
+            document.getElementById('level-progress-text').innerText = `${pts} / 100 ұпай`;
+            const percent = Math.min(100, (pts / 100) * 100);
+            document.getElementById('level-progress-bar').style.width = percent + '%';
+
+            if (pts >= 100) {
+                document.getElementById('user-rank').innerText = 'Геометрия Мастері';
+                unlockBadge(4);
+            } else if (pts >= 50) {
+                document.getElementById('user-rank').innerText = 'Пифагор Шәкірті';
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('geo_7_app_data', JSON.stringify({
+                points: state.points,
+                badges: state.unlockedBadges
+            }));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('geo_7_app_data');
+            if (saved) {
+                const data = JSON.parse(saved);
+                state.points = data.points || 0;
+                state.unlockedBadges = data.badges || [];
+
+                document.getElementById('user-points').innerText = state.points;
+                state.unlockedBadges.forEach(id => unlockBadge(id));
+                updateAchievements();
+            }
+        }
+    </script>
+</body>
+</html>
